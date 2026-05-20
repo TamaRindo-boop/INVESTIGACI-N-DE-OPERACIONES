@@ -1,0 +1,2 @@
+# INVESTIGACI-N-DE-OPERACIONES
+Clase 2026 sexto cuatri
