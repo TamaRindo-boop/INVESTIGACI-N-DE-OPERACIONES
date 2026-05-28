@@ -1,0 +1,26 @@
+from pulp import *
+
+# Crear problema
+problema = LpProblem("Videojuegos", LpMaximize)
+
+# Variables
+x = LpVariable("Personajes", lowBound=0)
+y = LpVariable("Escenarios", lowBound=0)
+
+# Función objetivo
+problema += 80*x + 60*y
+
+# Restricciones
+problema += 2*x + y <= 12
+problema += x + 2*y <= 14
+
+# Resolver
+problema.solve()
+
+# Resultados
+print("Estado:", LpStatus[problema.status])
+
+print("Personajes =", value(x))
+print("Escenarios =", value(y))
+
+print("Valor máximo =", value(problema.objective))
