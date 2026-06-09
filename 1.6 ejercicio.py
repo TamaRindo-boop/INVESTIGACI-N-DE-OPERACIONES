@@ -1,0 +1,26 @@
+from pulp import *
+
+# Crear el problema
+problema = LpProblem("Almacenamiento_Cloud", LpMinimize)
+
+# Variables
+x = LpVariable("Almacenamiento_Estandar", lowBound=0)
+y = LpVariable("Almacenamiento_Premium", lowBound=0)
+
+# Función objetivo
+problema += 20*x + 60*y
+
+# Restricciones
+problema += x + 3*y >= 15
+problema += x + y >= 7
+
+# Resolver
+problema.solve()
+
+# Resultados
+print("Estado:", LpStatus[problema.status])
+
+print("TB Estándar =", value(x))
+print("TB Premium =", value(y))
+
+print("Costo mínimo = $", value(problema.objective))
