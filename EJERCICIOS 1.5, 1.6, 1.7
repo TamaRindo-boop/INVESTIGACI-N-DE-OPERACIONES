@@ -1,1 +1,77 @@
 
+from pulp import *
+
+# Crear el problema
+problema = LpProblem("Almacenamiento_Cloud", LpMinimize)
+
+# Variables
+x = LpVariable("Almacenamiento_Estandar", lowBound=0)
+y = LpVariable("Almacenamiento_Premium", lowBound=0)
+
+# Función objetivo
+problema += 20*x + 60*y
+
+# Restricciones
+problema += x + 3*y >= 15
+problema += x + y >= 7
+
+# Resolver
+problema.solve()
+
+# Resultados
+print("Estado:", LpStatus[problema.status])
+
+print("TB Estándar =", value(x))
+print("TB Premium =", value(y))
+
+print("Costo mínimo = $", value(problema.objective))
+from pulp import *
+
+# Crear modelo de maximización
+modelo = LpProblem("Videojuego_Assets", LpMaximize)
+
+# Variables de decisión
+x = LpVariable("Personajes", lowBound=0)
+y = LpVariable("Escenarios", lowBound=0)
+
+# Función objetivo
+modelo += 80*x + 60*y
+
+# Restricciones
+modelo += 2*x + y <= 12
+modelo += x + 2*y <= 14
+
+# Resolver
+modelo.solve()
+
+# Resultados
+print("Estado:", LpStatus[modelo.status])
+print("Personajes:", value(x))
+print("Escenarios:", value(y))
+print("Valor máximo: $", value(modelo.objective))
+from pulp import *
+
+# Crear modelo de maximización
+modelo = LpProblem("Optimizacion_Cluster", LpMaximize)
+
+# Variables de decisión
+x = LpVariable("Backend", lowBound=0, cat="Integer")
+y = LpVariable("DataWorker", lowBound=0, cat="Integer")
+
+# Función objetivo
+modelo += 300 * x + 250 * y, "Rendimiento_Total"
+
+# Restricciones
+modelo += 2 * x + y <= 16, "Memoria_RAM"
+modelo += x + 2 * y <= 17, "Almacenamiento_SSD"
+modelo += x <= 6, "Limite_Backend"
+modelo += y <= 7, "Limite_DataWorker"
+
+# Resolver
+modelo.solve()
+
+# Resultados
+print("Estado:", LpStatus[modelo.status])
+print("Backends:", value(x))
+print("Data Workers:", value(y))
+print("Rendimiento máximo: $", value(modelo.objective), "USD por hora")
