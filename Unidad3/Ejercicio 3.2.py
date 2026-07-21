@@ -1,22 +1,31 @@
 from scipy.optimize import minimize
 
-def costo(v):
-    x, y = v
-    return x**2 + y**2 + x*y + 250*x + 350*y + 5000
+# Función de costo
+def utilidad(x, y):
+    return -x**2 - y**2 - x*y + 65*x + 75*y - 500
 
+# scipy solo minimiza, así que minimizamos el negativo de la utilidad
+def utilidad_negativa(v):
+    x, y = v
+    return -utilidad(x, y)
+
+limites = [(0, None), (0, None)]  # x >= 0, y >= 0
 iteracion = [0]
 
 def mostrar_avance(v):
     iteracion[0] += 1
-    print(f"Iteración {iteracion[0]}: x={v[0]:.4f}, y={v[1]:.4f}, costo={costo(v):.4f}")
+    x, y = v
+    print(f"Iteración {iteracion[0]}: x={x:.4f}, y={y:.4f}, utilidad={utilidad(x,y):.4f}")
 
-resultado = minimize(costo, x0=[0, 0], method='CG', callback=mostrar_avance)
-print("\nResultado final:", resultado.x, resultado.fun)
+resultado = minimize(utilidad_negativa, x0=[0, 0], method='L-BFGS-B',
+                      callback=mostrar_avance, bounds=limites)
 
-'''
-Resolver con el código del gradient CG y BFGS y luego verifiquen con
-scipy.optimize.minimize.
+x_opt, y_opt = resultado.x
+utilidad_opt = -resultado.fun
 
-¿Cuántos sitios web y cuántos terabytes deberían contratar según el modelo?
-¿Qué significa ese "costo mínimo" en pesos al mes?
-'''
+
+
+print("\n=\nResultado final:")
+print(f"Sitios web óptimos: {x_opt:.2f} cientos de sitios")
+print(f"Almacenamiento óptimo: {y_opt:.2f} cientos de TB")
+print(f"Costo mínimo: ${utilidad_opt:,.2f}")
